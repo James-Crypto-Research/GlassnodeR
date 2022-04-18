@@ -3,13 +3,16 @@ t <- v <- NULL
 #' Get the Total Value Locked for all DeFi platforms
 #'
 #' @param api_key The API key to use. Checks the env variable API_KEY
-#' @param since
-#' @param until
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #'
-#' @return
+#' @return Returns a tidy data set denominated in USD
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Need a API key to run
+#' x <- get_tvl()
+#' }
 
 get_tvl <- function(since=NULL,until=NULL,api_key = Sys.getenv("GN_API_KEY")){
     tmp <- list("a" = "eth",

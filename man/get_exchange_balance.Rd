@@ -4,16 +4,41 @@
 \alias{get_exchange_balance}
 \title{Get Balances for Exchange Wallets}
 \usage{
-get_exchange_balance(params = list(), api_key = Sys.getenv("API_KEY"))
+get_exchange_balance(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  exchange = "aggregated",
+  currency = "USD",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
 }
 \arguments{
-\item{params}{A list of parameters to pass to the API call}
+\item{asset}{This is the asset to get information on. The list of available assets is on the GN API site}
 
-\item{api_key}{The API key to use. By default it will check the API_KEY evn variable}
+\item{since, until}{A POSIX compatible date-time object. It's converted to a unix date number}
+
+\item{frequency}{A resolution for the data. See API documentation but it defaults to 24h}
+
+\item{exchange}{What exchange to query. Defaults to all ("aggregated")}
+
+\item{currency}{Return values in native tokens or in USD (the default)}
+
+\item{api_key}{The API key to use. By default it will check the API_KEY environmental variable}
+
+\item{as_date}{A logical to return a date-time object or a date object for daily observations}
 }
 \value{
-
+Returns a tibble with columns for the datetime, token amount, and exchange
 }
 \description{
 Get Balances for Exchange Wallets
+}
+\examples{
+\dontrun{
+#Need a valid API key to run
+x <- get_exchange_balance()
+}
 }

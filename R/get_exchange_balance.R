@@ -2,25 +2,36 @@ t <- asset <- NULL
 
 #' Get Balances for Exchange Wallets
 #'
-#' @param api_key The API key to use. By default it will check the API_KEY evn variable
-#' @param asset
-#' @param since
-#' @param until
-#' @param frequency
-#' @param exchange
-#' @param currency
-#' @param as_date
 #'
-#' @return
+#'
+#' @param api_key The API key to use. By default it will check the API_KEY environmental variable
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param exchange What exchange to query. Defaults to all ("aggregated")
+#' @param currency Return values in native tokens or in USD (the default)
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime, token amount, and exchange
 #' @export
 #' @importFrom rlang :=
 #' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_exchange_balance()
+#' }
 get_exchange_balance <- function(asset="BTC",since=NULL,until=NULL,
                                  frequency="24h",
                                  exchange="aggregated",
                                  currency="USD",
                                  api_key = Sys.getenv("GN_API_KEY"),
                                  as_date=TRUE){
+  if (!is.null(since)){
+    since <- as.numeric(since)
+  }
+  if (!is.null(until)){
+    until <- as.numeric(until)
+  }
   tmp <- list("a" = asset,
                  "s" = since,
                  "u" = until,

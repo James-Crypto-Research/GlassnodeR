@@ -9,11 +9,19 @@ call_glassnode_api(path, params)
 \arguments{
 \item{path}{The path to pass to the API URL}
 
-\item{params}{A list of parameters to pass to the API}
+\item{params}{a set of parameters to pass the API.}
 }
 \value{
-
+a parsed list from the JSON structure
 }
 \description{
-Call Glassnode API
+This is the core function connecting to Glassnode. Since all (most?) API
+ calls have the same seven parameters it does some error checking
+ and adds defaults all the
+}
+\examples{
+\dontrun{
+# Need a valid API to run
+x <- call_glassnode_api()
+}
 }

@@ -1,15 +1,22 @@
-#' Title
+#' Get amount of a given asset is deposited in smart contracts
 #'
-#' @param asset
-#' @param since
-#' @param until
-#' @param api_key
-#' @param as_date
+#' This function returns the percentage (in decimal form) of all
+#' circulable supply of the asset that is deposited in a smart contract
 #'
-#' @return
+#'
+#' @param asset The asset to query. Default is ETH
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param api_key The API key to use. By default it will check the API_KEY environmental variable
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return a tidy data frame of data
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Need a valid API key to run
+#' x <- get_supply_contracts()
+#' }
 get_supply_contracts <- function(asset="ETH",since=NULL,until=NULL,
                                  api_key = Sys.getenv("GN_API_KEY"),
                                  as_date=TRUE) {

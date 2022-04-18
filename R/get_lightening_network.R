@@ -1,13 +1,13 @@
-#' Title
+#' call the GN API for lightening parameters
 #'
-#' @param var_name
-#' @param params
+#' @param var_name Specific lightning network parameter
+#' @param params list of parameters to query the API with
 #'
-#' @return
+#' @return a tibble with the datetime and the specific attribute
 #' @importFrom rlang :=
 #'
 #' @examples
-call_lightening_api <- function(var_name,
+call_lightning_api <- function(var_name,
                                 params){
 
   return_val <- call_glassnode_api(
@@ -19,20 +19,34 @@ call_lightening_api <- function(var_name,
 }
 
 
-#' Title
+#' Get statistics on the Lightning Network
 #'
-#' @param api_key
-#' @param since
-#' @param until
-#' @param frequency
-#' @param currency
-#' @param as_date
+#' This function retrieves all available statistisc on the lightning network and returns them
+#' as a tidy data set.
 #'
-#' @return
+#' The specific functions it returns are:
+#'  - Mean channel size (channel_size_mean)
+#'  - Median channel size (channel_size_median)
+#'  - Total capacity of the network (network_capacity_sum)
+#'  - The total number of channels (channels_count)
+#'  - The total number of nodes (nodes_count)
+#'  The default is to return the value amounts as USD unless "NATIVE" is chosen for currency
+#'
+#' @param api_key The api key used to retrieve the data
+#' @param since,until A POSIX compatible value that will be converted to a unix data number
+#' @param frequency What resolution to use. See API docs for possible values. The default is "24h" (daily)
+#' @param currency What currency to use. Choices are "USD" or "NATIVE"
+#' @param as_date A logical for turning the datatime object returned to a date object if it is daily data
+#'
+#' @return A tidy data set of characteristics
 #' @export
 #'
 #' @examples
-get_lightening_network <- function(since=NULL, until=NULL, frequency = "24h", currency="USD", api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE){
+#' \dontrun{
+#' # Need a valid API key to run
+#' x <- get_lightning_network
+#' }
+get_lightning_network <- function(since=NULL, until=NULL, frequency = "24h", currency="USD", api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE){
   paths = list(
     "channel_size_mean",
     "channel_size_median",
@@ -40,6 +54,12 @@ get_lightening_network <- function(since=NULL, until=NULL, frequency = "24h", cu
     "channels_count",
     "nodes_count"
   )
+  if (!is.null(since)){
+    since <- as.numeric(since)
+  }
+  if (!is.null(until)){
+    until <- as.numeric(until)
+  }
   tmp <- list(
     "a" = "btc",
     "s" = since,
@@ -49,7 +69,7 @@ get_lightening_network <- function(since=NULL, until=NULL, frequency = "24h", cu
     "api_key" = api_key
   )
   params <- do.call(make_params,tmp)
-  x <- paths |> purrr::map(call_lightening_api, params) |>
+  x <- paths |> purrr::map(call_lightning_api, params) |>
     plyr::join_all(by="date")
   if (as_date & params["i"] == "24h"){
     x$date <- as.Date(x$date)
