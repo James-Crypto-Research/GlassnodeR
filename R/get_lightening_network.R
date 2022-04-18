@@ -29,7 +29,7 @@ call_lightening_api <- function(var_name,
 #' @export
 #'
 #' @examples
-get_lightening_network <- function(api_key = Sys.getenv("API_KEY"),...){
+get_lightening_network <- function(api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE,...){
   paths = list(
     "channel_size_mean",
     "channel_size_median",
@@ -37,10 +37,13 @@ get_lightening_network <- function(api_key = Sys.getenv("API_KEY"),...){
     "channels_count",
     "nodes_count"
   )
-  params <- make_params(api_key,...)
-  x <- paths |> purrr::map(call_lightening_api,
-                         api_key=api_key,...) |>
+  params <- make_params(api_key=api_key,...)
+  params["a"] <- "btc"
+  x <- paths |> purrr::map(call_lightening_api, params) |>
     plyr::join_all(by="date")
+  if (as_date & params["i"] == "24h"){
+    x$date <- as.Date(x$date)
+  }
 
   return(x)
 

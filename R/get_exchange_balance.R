@@ -1,4 +1,4 @@
-t <- token <- NULL
+t <- asset <- NULL
 
 #' Get Balances for Exchange Wallets
 #'
@@ -9,14 +9,29 @@ t <- token <- NULL
 #' @export
 #' @importFrom rlang :=
 #' @examples
-get_exchange_balance <- function(asset,since,until,frequency="24",currency="USD",api_key = Sys.getenv("API_KEY")){
-  params["api_key"] <-  api_key
-
+get_exchange_balance <- function(asset="BTC",since=NULL,until=NULL,
+                                 frequency="24h",
+                                 exchange="aggregated",
+                                 currency="USD",
+                                 api_key = Sys.getenv("GN_API_KEY"),
+                                 as_date=TRUE){
+  tmp <- list("a" = asset,
+                 "s" = since,
+                 "u" = until,
+                 "i" = frequency,
+                 "e" = exchange,
+                 "c" = currency,
+                 "api_key" = api_key)
+  params <- do.call(make_params, tmp)
   x <- call_glassnode_api(
     path = glue::glue("v1/metrics/distribution/balance_exchanges"), params
   ) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, {{token}} :=v) |>
-    dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01")))
+    dplyr::rename(date=t, {{asset}} :=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  x$exchange <- exchange
   return(x)
 }

@@ -17,15 +17,14 @@
 #'
 #' @examples
 call_glassnode_api <- function(path, params) {
-  url <- httr::modify_url("https://api.glassnode.com/", path = path)
-  resp <- httr::GET(url = url,query=params)
+  tmp_url <- httr::modify_url("https://api.glassnode.com/", query=params,path = path)
+  resp <- httr::GET(url = tmp_url)
   if (httr::http_error(resp)) {
     msg <- glue::glue(
-      "Glassnode API request failed ({status_code(resp)})"
+      "Glassnode API request failed ({httr::status_code(resp)})","\n", url
     )
     stop(
       msg,
-      call. = FALSE
     )
   }
   parsed <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = TRUE)

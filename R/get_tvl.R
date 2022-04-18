@@ -10,13 +10,11 @@ t <- v <- NULL
 #'
 #' @examples
 
-get_tvl <- function(since=NULL,until=NULL,api_key = Sys.getenv("API_KEY")){
-    tmp <- list("asset" = "ETH",
-                "frequency" = frequency,
+get_tvl <- function(since=NULL,until=NULL,api_key = Sys.getenv("GN_API_KEY")){
+    tmp <- list("a" = "eth",
                 "api_key" = api_key,
-                "since" = since,
-                "until" = until)
-    tmp["api_key"] <- api_key
+                "s" = since,
+                "u" = until)
     params <- do.call(make_params, tmp)
     x <- call_glassnode_api(
       path="v1/metrics/defi/total_value_locked",params
