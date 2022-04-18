@@ -2,8 +2,14 @@ t <- asset <- NULL
 
 #' Get Balances for Exchange Wallets
 #'
-#' @param params A list of parameters to pass to the API call
 #' @param api_key The API key to use. By default it will check the API_KEY evn variable
+#' @param asset
+#' @param since
+#' @param until
+#' @param frequency
+#' @param exchange
+#' @param currency
+#' @param as_date
 #'
 #' @return
 #' @export

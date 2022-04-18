@@ -2,7 +2,6 @@
 #'
 #' @param var_name
 #' @param params
-#' @param api_key
 #'
 #' @return
 #' @importFrom rlang :=
@@ -22,14 +21,18 @@ call_lightening_api <- function(var_name,
 
 #' Title
 #'
-#' @param params
 #' @param api_key
+#' @param since
+#' @param until
+#' @param frequency
+#' @param currency
+#' @param as_date
 #'
 #' @return
 #' @export
 #'
 #' @examples
-get_lightening_network <- function(api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE,...){
+get_lightening_network <- function(since=NULL, until=NULL, frequency = "24h", currency="USD", api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE){
   paths = list(
     "channel_size_mean",
     "channel_size_median",
@@ -37,8 +40,15 @@ get_lightening_network <- function(api_key = Sys.getenv("GN_API_KEY"),as_date=TR
     "channels_count",
     "nodes_count"
   )
-  params <- make_params(api_key=api_key,...)
-  params["a"] <- "btc"
+  tmp <- list(
+    "a" = "btc",
+    "s" = since,
+    "u" = until,
+    "i" = frequency,
+    "c" = currency,
+    "api_key" = api_key
+  )
+  params <- do.call(make_params,tmp)
   x <- paths |> purrr::map(call_lightening_api, params) |>
     plyr::join_all(by="date")
   if (as_date & params["i"] == "24h"){

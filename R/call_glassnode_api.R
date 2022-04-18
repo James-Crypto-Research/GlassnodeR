@@ -4,14 +4,8 @@
 #'  calls have the same seven parameters it does some error checking
 #'  and adds defaults all the
 #'
-#' @param a
-#' @param s
-#' @param u
-#' @param i
-#' @param f
-#' @param c
-#' @param timestamp_format
 #' @param path The path to pass to the API URL
+#' @param params
 #'
 #' @return
 #'

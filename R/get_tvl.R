@@ -2,8 +2,9 @@ t <- v <- NULL
 
 #' Get the Total Value Locked for all DeFi platforms
 #'
-#' @param params A list of parameters to pass to the API
 #' @param api_key The API key to use. Checks the env variable API_KEY
+#' @param since
+#' @param until
 #'
 #' @return
 #' @export

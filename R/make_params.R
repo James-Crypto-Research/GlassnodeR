@@ -1,11 +1,7 @@
 #' Title
 #'
-#' @param asset
-#' @param since
-#' @param until
-#' @param frequency
-#' @param currency
 #' @param api_key
+#' @param ...
 #'
 #' @return
 #'
