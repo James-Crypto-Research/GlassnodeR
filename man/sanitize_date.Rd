@@ -7,7 +7,7 @@
 sanitize_date(the_date)
 }
 \arguments{
-\item{the_date}{}
+\item{the_date}{a POSIXt or string that can be converted to it}
 }
 \value{
 a unix numeric for datetime

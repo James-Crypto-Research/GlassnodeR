@@ -3,6 +3,8 @@
 export(get_all_exchange_balance)
 export(get_exchange_balance)
 export(get_lightning_network)
+export(get_percent_exchange_balance)
+export(get_percent_top_balance)
 export(get_supply_contracts)
 export(get_tvl)
 export(sanitize_date)
