@@ -54,13 +54,7 @@ get_lightning_network <- function(since=NULL, until=NULL, frequency = "24h", cur
     "channels_count",
     "nodes_count"
   )
-  if (!is.null(since)){
-    since <- as.numeric(since)
-  }
-  if (!is.null(until)){
-    until <- as.numeric(until)
-  }
-  tmp <- list(
+tmp <- list(
     "a" = "btc",
     "s" = since,
     "u" = until,
