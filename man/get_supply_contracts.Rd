@@ -8,8 +8,7 @@ get_supply_contracts(
   asset = "ETH",
   since = NULL,
   until = NULL,
-  api_key = Sys.getenv("GN_API_KEY"),
-  as_date = TRUE
+  api_key = Sys.getenv("GN_API_KEY")
 )
 }
 \arguments{

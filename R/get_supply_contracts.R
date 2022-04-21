@@ -18,8 +18,7 @@
 #' x <- get_supply_contracts()
 #' }
 get_supply_contracts <- function(asset="ETH",since=NULL,until=NULL,
-                                 api_key = Sys.getenv("GN_API_KEY"),
-                                 as_date=TRUE) {
+                                 api_key = Sys.getenv("GN_API_KEY")) {
   tmp <- list("a" = asset,
               "s" = since,
               "u" = until,
