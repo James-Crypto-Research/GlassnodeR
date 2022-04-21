@@ -20,7 +20,7 @@ get_transactions_count <- function(asset="BTC",since=NULL,until=NULL,frequency="
   tmp <- list("a" = asset,
               "s" = since,
               "u" = until,
-              "f" = frequency,
+              "i" = frequency,
               "api_key" = api_key)
   tmp_name <- glue::glue({{asset}},"_tx_count")
   params <- do.call(make_params, tmp)

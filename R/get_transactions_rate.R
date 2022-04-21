@@ -20,7 +20,7 @@ get_transactions_rate <- function(asset="BTC",since=NULL,until=NULL,frequency="2
   tmp <- list("a" = asset,
               "s" = since,
               "u" = until,
-              "f" = frequency,
+              "i" = frequency,
               "api_key" = api_key)
   tmp_name <- glue::glue({{asset}},"_tx_rate")
   params <- do.call(make_params, tmp)
