@@ -7,7 +7,6 @@
 #' @param asset The asset to query. Default is ETH
 #' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #' @param api_key The API key to use. By default it will check the API_KEY environmental variable
-#' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
 #' @return a tidy data frame of data
 #' @export
