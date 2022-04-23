@@ -38,7 +38,7 @@ get_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
                                      frequency=frequency,api_key=api_key,
                                      as_date=as_date)
   x <- plyr::join_all(list(active_a,total_a,send_a,rec_a,dep_a,with_a,new_a),
-                      by="date") |> as_tibble()
+                      by="date") |> tibble::as_tibble()
   return(x)
 
 }
