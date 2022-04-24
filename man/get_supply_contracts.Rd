@@ -17,8 +17,6 @@ get_supply_contracts(
 \item{since, until}{A POSIX compatible date-time object. It's converted to a unix date number}
 
 \item{api_key}{The API key to use. By default it will check the API_KEY environmental variable}
-
-\item{as_date}{A logical to return a date-time object or a date object for daily observations}
 }
 \value{
 a tidy data frame of data
