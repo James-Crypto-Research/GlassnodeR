@@ -23,10 +23,6 @@ get_closing_price(
 \item{api_key}{The API key to use. By default it will check the API_KEY environmental variable}
 
 \item{as_date}{A logical to return a date-time object or a date object for daily observations}
-
-\item{exchange}{What exchange to query. Defaults to all ("aggregated")}
-
-\item{currency}{Return values in native tokens or in USD (the default)}
 }
 \value{
 Returns a tibble with columns for the datetime and price

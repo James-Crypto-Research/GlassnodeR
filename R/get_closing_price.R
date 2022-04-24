@@ -4,8 +4,6 @@
 #' @param asset This is the asset to get information on. The list of available assets is on the GN API site
 #' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
-#' @param exchange What exchange to query. Defaults to all ("aggregated")
-#' @param currency Return values in native tokens or in USD (the default)
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
 #' @return Returns a tibble with columns for the datetime and price
@@ -25,7 +23,6 @@ get_closing_price <-  function(asset="BTC",since=NULL,until=NULL,
               "s" = since,
               "u" = until,
               "i" = frequency,
-              "c" = currency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- call_glassnode_api(
