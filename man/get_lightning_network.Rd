@@ -43,6 +43,6 @@ The specific functions it returns are:
 \examples{
 \dontrun{
 # Need a valid API key to run
-x <- get_lightning_network
+x <- get_lightning_network()
 }
 }

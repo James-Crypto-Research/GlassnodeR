@@ -7,6 +7,11 @@
 #' @importFrom rlang :=
 #'
 #' @examples
+#'  \dontrun{
+#' # Need a valid API to run
+#' x <- call_lightning_api()
+#' }
+#' @noRd
 call_lightning_api <- function(var_name,
                                 params){
 
@@ -44,7 +49,7 @@ call_lightning_api <- function(var_name,
 #' @examples
 #' \dontrun{
 #' # Need a valid API key to run
-#' x <- get_lightning_network
+#' x <- get_lightning_network()
 #' }
 get_lightning_network <- function(since=NULL, until=NULL, frequency = "24h", currency="USD", api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE){
   paths = list(

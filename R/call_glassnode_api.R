@@ -14,6 +14,7 @@
 #' # Need a valid API to run
 #' x <- call_glassnode_api()
 #' }
+#' @noRd
 call_glassnode_api <- function(path, params) {
   tmp_url <- httr::modify_url("https://api.glassnode.com/", query=params,path = path)
   resp <- httr::GET(url = tmp_url)
