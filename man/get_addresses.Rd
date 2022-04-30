@@ -2,9 +2,79 @@
 % Please edit documentation in R/addresses.R
 \name{get_addresses}
 \alias{get_addresses}
-\title{Get all addresses statistics during the period}
+\alias{get_withdrawing_addresses}
+\alias{get_new_addresses}
+\alias{get_depositing_addresses}
+\alias{get_receiving_addresses}
+\alias{get_sending_addresses}
+\alias{get_total_addresses}
+\alias{get_active_addresses}
+\title{#' Get all addresses statistics during the period}
 \usage{
 get_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_withdrawing_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_new_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_depositing_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_receiving_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_sending_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_total_addresses(
+  asset = "BTC",
+  since = NULL,
+  until = NULL,
+  frequency = "24h",
+  api_key = Sys.getenv("GN_API_KEY"),
+  as_date = TRUE
+)
+
+get_active_addresses(
   asset = "BTC",
   since = NULL,
   until = NULL,
@@ -30,7 +100,7 @@ get_addresses(
 return a tibble with the date and the addresses
 }
 \description{
-Get all addresses statistics during the period
+#' Get all addresses statistics during the period
 }
 \examples{
 \dontrun{
