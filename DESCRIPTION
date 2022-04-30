@@ -1,13 +1,17 @@
 Package: GlassnodeR
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: Retreive Glassnode API Aata and Return a Tidy Dataset
+Version: 0.5.0
+Authors@R:
+    person("James", "Chapman", , "jchapman@bankofcanada", role = c("aut","cre"),
+           comment = c(ORCID = "0000-0003-3154-9699"))
+Description: This package uses the users API key to download various aspects of
+ the glassnode API. It then returns this data to the user in a consistent and
+ tidy format for ease of analysis.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: httr, jsonlite, plyr, dplyr, glue, tibble, rlang, purrr,tidyr,lubridate
 RoxygenNote: 7.1.2
+Suggests: 
+    testthat (>= 3.0.0)

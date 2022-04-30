@@ -27,7 +27,7 @@ get_transactions_count(
 \item{as_date}{A logical to return a Date not a POSIXct object for daily or lower frequency}
 }
 \value{
-
+This function returns a tibble consisting of the date and transaction rates.
 }
 \description{
 Get the total number of transactions in the given frequency

@@ -7,7 +7,7 @@
 #' @param api_key The api key. It looks in the env variable GN_API_KEY if not set
 #' @param as_date A logical to return a Date not a POSIXct object for daily or lower frequency
 #'
-#' @return
+#' @return This function returns a tibble consisting of the date and transaction rates.
 #' @export
 #'
 #' @examples

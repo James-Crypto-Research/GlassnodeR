@@ -27,7 +27,7 @@ get_transactions_rate(
 \item{as_date}{A logical to return a Date not a POSIXct object for daily or lower frequency}
 }
 \value{
-
+This function returns a tibble consisting of the date and transaction rates.
 }
 \description{
 Get the total rate of transactions per second in the given frequency
