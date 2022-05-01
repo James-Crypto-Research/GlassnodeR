@@ -51,7 +51,10 @@ call_lightning_api <- function(var_name,
 #' # Need a valid API key to run
 #' x <- get_lightning_network()
 #' }
-get_lightning_network <- function(since=NULL, until=NULL, frequency = "24h", currency="USD", api_key = Sys.getenv("GN_API_KEY"),as_date=TRUE){
+get_lightning_network <- function(since=NULL, until=NULL, frequency = "24h",
+                                  currency="USD",
+                                  api_key = Sys.getenv("GN_API_KEY"),
+                                  as_date=TRUE){
   paths = list(
     "channel_size_mean",
     "channel_size_median",
