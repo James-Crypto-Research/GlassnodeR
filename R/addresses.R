@@ -148,7 +148,7 @@ call_address_api <- function(var_name,api_endpoint,params,as_date){
   ) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{tmp_name}} :=v) |>
-    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00"))
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & (params$i %in% c("24h", "1w","1month"))) {
     x$date <- as.Date(x$date)
   }

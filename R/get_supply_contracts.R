@@ -28,7 +28,7 @@ get_supply_contracts <- function(asset="ETH",since=NULL,until=NULL,
   ) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{asset}} :=v) |>
-    dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01 00:00:00")))
+    dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC")))
   return(x)
 
 }

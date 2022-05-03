@@ -79,7 +79,7 @@ get_miner_rev <- function(miner="aggregated",
   ) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{miner}} :=v) |>
-    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00"))
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & (frequency == "24h")) {
     x$date <- as.Date(x$date)
   }
@@ -152,7 +152,7 @@ get_miner_vol <- function(miner="aggregated",
   ) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{miner}} :=v) |>
-    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00"))
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & (frequency == "24h")) {
     x$date <- as.Date(x$date)
   }

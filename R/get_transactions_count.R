@@ -29,7 +29,7 @@ get_transactions_count <- function(asset="BTC",since=NULL,until=NULL,frequency="
   ) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{tmp_name}} :=v) |>
-    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00"))
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & (frequency %in% c("24h", "1w","1month"))) {
     x$date <- as.Date(x$date)
   }

@@ -20,10 +20,10 @@ call_glassnode_api <- function(path, params) {
   resp <- httr::GET(url = tmp_url)
   if (httr::http_error(resp)) {
     msg <- glue::glue(
-      "Glassnode API request failed ({httr::status_code(resp)})","\n", url
+      "Glassnode API request failed ({httr::status_code(resp)})","\n", tmp_url
     )
     stop(
-      msg,
+      msg
     )
   }
   parsed <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = TRUE)

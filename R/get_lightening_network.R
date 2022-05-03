@@ -19,7 +19,7 @@ call_lightning_api <- function(var_name,
     path= glue::glue( "v1/metrics/lightning/", var_name),params
   ) |> tibble::as_tibble() |>
     dplyr::rename(date=t,{{var_name}}:= v) |>
-    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01"))
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01", tz="UTC"))
   return(return_val)
 }
 

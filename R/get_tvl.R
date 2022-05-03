@@ -24,6 +24,6 @@ get_tvl <- function(since=NULL,until=NULL,api_key = Sys.getenv("GN_API_KEY")){
       path="v1/metrics/defi/total_value_locked",params
     ) |> tibble::as_tibble() |>
       dplyr::rename(date=t,tvl=v) |>
-      dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01")))
+      dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01", tz="UTC")))
     return(x)
   }
