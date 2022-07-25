@@ -20,6 +20,8 @@ call_lightning_api <- function(var_name,
   ) |> tibble::as_tibble() |>
     dplyr::rename(date=t,{{var_name}}:= v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01", tz="UTC"))
+  unames <- names(return_val)[2]
+  return_val <- return_val |> tidyr::unnest(cols = unames)
   return(return_val)
 }
 
@@ -35,6 +37,11 @@ call_lightning_api <- function(var_name,
 #'  - Total capacity of the network (network_capacity_sum)
 #'  - The total number of channels (channels_count)
 #'  - The total number of nodes (nodes_count)
+#'  - Lightning network median base fee (fee_base_median)
+#'  - Lightning netowrk fee rate (fee_rate_median)
+#'  - Network Gini capacity distribution (gini_capacity)
+#'  - Network Gini Channel Distribution (gini_channel)
+#'  - Network node connectivity (node_connectivity)
 #'  The default is to return the value amounts as USD unless "NATIVE" is chosen for currency
 #'
 #' @param api_key The api key used to retrieve the data
@@ -60,7 +67,12 @@ get_lightning_network <- function(since=NULL, until=NULL, frequency = "24h",
     "channel_size_median",
     "network_capacity_sum",
     "channels_count",
-    "nodes_count"
+    "nodes_count",
+    "base_fee_median",
+    "fee_rate_median",
+    "gini_capacity_distribution",
+    "gini_channel_distribution",
+    "node_connectivity"
   )
 tmp <- list(
     "a" = "btc",
@@ -76,7 +88,7 @@ tmp <- list(
   if (as_date & params["i"] == "24h"){
     x$date <- as.Date(x$date)
   }
-
+  x <- dplyr::as_tibble(x)
   return(x)
 
 }
