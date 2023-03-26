@@ -38,6 +38,11 @@ The specific functions it returns are:
  - Total capacity of the network (network_capacity_sum)
  - The total number of channels (channels_count)
  - The total number of nodes (nodes_count)
+ - Lightning network median base fee (fee_base_median)
+ - Lightning netowrk fee rate (fee_rate_median)
+ - Network Gini capacity distribution (gini_capacity)
+ - Network Gini Channel Distribution (gini_channel)
+ - Network node connectivity (node_connectivity)
  The default is to return the value amounts as USD unless "NATIVE" is chosen for currency
 }
 \examples{

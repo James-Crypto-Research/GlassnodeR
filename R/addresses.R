@@ -31,10 +31,10 @@ get_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
                   "receiving_count", "sending_count",
                   "active_count","new_non_zero_count",
                   "count")
-  var_names <- c("_with_add","_dep_add",
-                 "_recv_add","_sent_add",
-                 "_active_add","_new_add",
-                 "_tot_add")
+  var_names <- c("with_add","dep_add",
+                 "recv_add","sent_add",
+                 "active_add","new_add",
+                 "tot_add")
   x <- purrr::map2(var_names,end_points,call_address_api,params,as_date) |>
     plyr::join_all(by="date") |> tibble::as_tibble()
   return(x)
