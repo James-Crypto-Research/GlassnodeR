@@ -15,7 +15,9 @@
 #' x <- call_glassnode_api()
 #' }
 #' @noRd
-call_glassnode_api <- function(path, params) {
+call_glassnode_api <- function(path, ....) {
+  tmp <- list(...)
+  params <- do.call(make_params, tmp)
   tmp_url <- httr::modify_url("https://api.glassnode.com/", query=params,path = path)
   resp <- httr::GET(url = tmp_url)
   if (httr::http_error(resp)) {
@@ -26,8 +28,8 @@ call_glassnode_api <- function(path, params) {
       msg
     )
   }
-  parsed <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = TRUE)
-
+  parsed <- httr::content(resp, "text", encoding = "UTF-8") |>
+    jsonlite::fromJSON()
   return(parsed)
 }
 
