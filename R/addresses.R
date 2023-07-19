@@ -6,8 +6,10 @@
 #' @param since The start date
 #' @param until The end date
 #' @param frequency The frequency to examine: 1h,24h,10m,1w,1month
-#' @param api_key The api key. It looks in the env variable GN_API_KEY if not set
-#' @param as_date A logical to return a Date not a POSIXct object for daily or lower frequency
+#' @param api_key The api key. It looks in the env variable GN_API_KEY if
+#' not set
+#' @param as_date A logical to return a Date not a POSIXct object for daily
+#' or lower frequency
 #'
 #' @return return a tibble with the date and the addresses
 #' @export
@@ -41,7 +43,10 @@ get_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
 }
 
 #' @rdname get_addresses
-get_withdrawing_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
+get_withdrawing_addresses <- function(asset="BTC",
+                                      since=NULL,
+                                      until=NULL,
+                                      frequency="24h",
                                       api_key = Sys.getenv("GN_API_KEY"),
                                       as_date=TRUE) {
   tmp <- list("a" = asset,
@@ -50,7 +55,8 @@ get_withdrawing_addresses <- function(asset="BTC",since=NULL,until=NULL,frequenc
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_address_api("_with_add","receiving_from_exchanges_count", params,as_date)
+  x <- call_address_api("_with_add",
+                        "receiving_from_exchanges_count", params,as_date)
   return(x)
 }
 
@@ -71,7 +77,8 @@ get_new_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
 }
 
 #' @rdname get_addresses
-get_depositing_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
+get_depositing_addresses <- function(asset="BTC",
+                                     since=NULL,until=NULL,frequency="24h",
                                      api_key = Sys.getenv("GN_API_KEY"),
                                      as_date=TRUE) {
   tmp <- list("a" = asset,
@@ -80,13 +87,15 @@ get_depositing_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_address_api("_dep_add","sending_to_exchanges_count", params,as_date)
+  x <- call_address_api("_dep_add",
+                        "sending_to_exchanges_count", params,as_date)
   return(x)
 }
 
 
 #' @rdname get_addresses
-get_receiving_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
+get_receiving_addresses <- function(asset="BTC",since=NULL,
+                                    until=NULL,frequency="24h",
                                     api_key = Sys.getenv("GN_API_KEY"),
                                     as_date=TRUE) {
     tmp <- list("a" = asset,
@@ -100,7 +109,8 @@ get_receiving_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency=
 }
 
 #' @rdname get_addresses
-get_sending_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
+get_sending_addresses <- function(asset="BTC",since=NULL,
+                                  until=NULL,frequency="24h",
                                   api_key = Sys.getenv("GN_API_KEY"),
                                   as_date=TRUE) {
     tmp <- list("a" = asset,
@@ -114,7 +124,8 @@ get_sending_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="2
 }
 
 #' @rdname get_addresses
-get_total_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
+get_total_addresses <- function(asset="BTC",since=NULL,
+                                until=NULL,frequency="24h",
                                 api_key = Sys.getenv("GN_API_KEY"),
                                 as_date=TRUE) {
   tmp <- list("a" = asset,
@@ -128,7 +139,8 @@ get_total_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h
 }
 
 #' @rdname get_addresses
-get_active_addresses <- function(asset="BTC",since=NULL,until=NULL,frequency="24h",
+get_active_addresses <- function(asset="BTC",since=NULL,
+                                 until=NULL,frequency="24h",
                                  api_key = Sys.getenv("GN_API_KEY"),
                                  as_date=TRUE) {
   tmp <- list("a" = asset,
@@ -148,7 +160,8 @@ call_address_api <- function(var_name,api_endpoint,params,as_date){
   ) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{tmp_name}} :=v) |>
-    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+    dplyr::mutate(date=as.POSIXct(date,
+                                  origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & (params$i %in% c("24h", "1w","1month"))) {
     x$date <- as.Date(x$date)
   }
