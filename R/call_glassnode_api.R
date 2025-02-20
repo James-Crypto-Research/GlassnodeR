@@ -15,7 +15,7 @@
 #' x <- call_glassnode_api()
 #' }
 #' @noRd
-call_glassnode_api <- function(path, ....) {
+call_glassnode_api <- function(path, ...) {
   tmp <- list(...)
   params <- do.call(make_params, tmp)
   tmp_url <- httr::modify_url("https://api.glassnode.com/", query=params,path = path)
