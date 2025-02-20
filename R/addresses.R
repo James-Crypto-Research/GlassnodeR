@@ -49,14 +49,16 @@ get_withdrawing_addresses <- function(asset="BTC",
                                       frequency="24h",
                                       api_key = Sys.getenv("GN_API_KEY"),
                                       as_date=TRUE) {
-  tmp <- list("a" = asset,
-              "s" = since,
-              "u" = until,
-              "i" = frequency,
-              "api_key" = api_key)
-  params <- do.call(make_params, tmp)
+
+              
   x <- call_address_api("_with_add",
-                        "receiving_from_exchanges_count", params,as_date)
+                        "receiving_from_exchanges_count", 
+                        a = asset,
+                        s = since,
+                        u = until,
+                        i = frequency,
+                        api_key = api_key,
+                        as_date = as_date)
   return(x)
 }
 
