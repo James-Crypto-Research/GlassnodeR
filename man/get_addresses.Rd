@@ -92,9 +92,11 @@ get_active_addresses(
 
 \item{frequency}{The frequency to examine: 1h,24h,10m,1w,1month}
 
-\item{api_key}{The api key. It looks in the env variable GN_API_KEY if not set}
+\item{api_key}{The api key. It looks in the env variable GN_API_KEY if
+not set}
 
-\item{as_date}{A logical to return a Date not a POSIXct object for daily or lower frequency}
+\item{as_date}{A logical to return a Date not a POSIXct object for daily
+or lower frequency}
 }
 \value{
 return a tibble with the date and the addresses
