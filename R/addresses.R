@@ -157,9 +157,10 @@ get_active_addresses <- function(asset="BTC",since=NULL,
 
 call_address_api <- function(var_name,api_endpoint,params,as_date){
   tmp_name <- glue::glue({{params$a}},"_",var_name)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/addresses/",api_endpoint), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/addresses/",api_endpoint)),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{tmp_name}} :=v) |>
     dplyr::mutate(date=as.POSIXct(date,

@@ -32,9 +32,10 @@ get_fees_mean <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/fees/volume_mean"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/fees/volume_mean")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fees_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -56,9 +57,10 @@ get_fees_median <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/fees/volume_median"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/fees/volume_median")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fees_median=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -80,9 +82,10 @@ get_fees_total <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/fees/volume_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/fees/volume_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fees_total=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -104,9 +107,10 @@ get_exchange_fees <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/fees/exchanges_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/fees/exchanges_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_fees=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

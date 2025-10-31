@@ -117,17 +117,17 @@ make_params <- function(api_key = Sys.getenv("GN_API_KEY"), ...) {
   )
   
   # Remove NULL values and standardize
-  params <- params %>%
-    purrr::compact() %>%
+  params <- params |>
+    purrr::compact() |>
     # Ensure consistent parameter handling
-    tibble::as_tibble() %>%
+    tibble::as_tibble() |>
     # Add default frequency if not specified
-    {
-      if (!"i" %in% names(.)) 
-        dplyr::mutate(., i = "24h")
-      else 
-        .
-    }
+    (\(x) {
+      if (!"i" %in% names(x))
+        dplyr::mutate(x, i = "24h")
+      else
+        x
+    })()
   
   # Sanitize date parameters
   date_params <- c("s", "u")

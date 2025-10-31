@@ -33,9 +33,10 @@ get_volume_adjusted_mean <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_adjusted_mean"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_adjusted_mean")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, volume_adjusted_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -57,9 +58,10 @@ get_volume_adjusted_median <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_adjusted_median"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_adjusted_median")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, volume_adjusted_median=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -81,9 +83,10 @@ get_volume_adjusted_total <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_adjusted_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_adjusted_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, volume_adjusted_total=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -105,9 +108,10 @@ get_volume_entity_adjusted <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_entity_adjusted_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_entity_adjusted_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, volume_entity_adjusted=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

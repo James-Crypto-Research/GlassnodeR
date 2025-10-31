@@ -32,9 +32,10 @@ get_exchange_inflows <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_to_exchanges_mean"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_to_exchanges_mean")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_inflows=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -56,9 +57,10 @@ get_exchange_outflows <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_from_exchanges_mean"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_from_exchanges_mean")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_outflows=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -80,9 +82,10 @@ get_exchange_netflows <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_volume_exchanges_net"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_volume_exchanges_net")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_netflows=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -104,9 +107,10 @@ get_exchange_deposits_count <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/transactions/transfers_to_exchanges_count"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/transactions/transfers_to_exchanges_count")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_deposits_count=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

@@ -25,9 +25,10 @@ get_exchange_fee_dominance <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/fees/exchanges_relative", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/fees/exchanges_relative"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_fee_dominance=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -64,9 +65,10 @@ get_exchange_fees_mean <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/fees/exchanges_mean", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/fees/exchanges_mean"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_fees_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -103,9 +105,10 @@ get_fee_ratio_multiple <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/fees/fee_ratio_multiple", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/fees/fee_ratio_multiple"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fee_ratio_multiple=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -142,9 +145,10 @@ get_gas_price_mean <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/fees/gas_price_mean", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/fees/gas_price_mean"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, gas_price_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -181,9 +185,10 @@ get_gas_price_median <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/fees/gas_price_median", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/fees/gas_price_median"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, gas_price_median=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))

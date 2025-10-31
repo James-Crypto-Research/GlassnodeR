@@ -26,9 +26,10 @@ get_realized_cap <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/market/marketcap_realized_usd", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/marketcap_realized_usd"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, realized_cap=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -65,9 +66,10 @@ get_delta_cap <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/market/deltacap_usd", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/deltacap_usd"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, delta_cap=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -104,9 +106,10 @@ get_price_drawdown_ath <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/market/price_drawdown_relative", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/price_drawdown_relative"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, price_drawdown_ath=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -143,9 +146,10 @@ get_lth_mvrv <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/market/mvrv_more_155", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/mvrv_more_155"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, lth_mvrv=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -182,9 +186,10 @@ get_median_mvrv <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/market/mvrv_median", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/mvrv_median"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, median_mvrv=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -221,9 +226,10 @@ get_price_ohlc <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/market/price_usd_ohlc", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/price_usd_ohlc"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, price_ohlc=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))

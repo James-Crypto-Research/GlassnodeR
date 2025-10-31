@@ -33,9 +33,10 @@ get_mempool_count <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mempool/txs_count_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mempool/txs_count_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, mempool_count=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -57,9 +58,10 @@ get_mempool_size <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mempool/txs_size_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mempool/txs_size_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, mempool_size=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -81,9 +83,10 @@ get_mempool_fees <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mempool/fees_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mempool/fees_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, mempool_fees=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -105,9 +108,10 @@ get_mempool_value <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mempool/txs_value_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mempool/txs_value_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, mempool_value=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

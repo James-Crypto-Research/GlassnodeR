@@ -35,15 +35,16 @@ get_revenue_miners <- function(chain="BTC",
                                         currency="USD",
                                         api_key = Sys.getenv("GN_API_KEY"),
                                         as_date=TRUE){
-  tmp <- list("api_key" = api_key)
-  miner_params <- do.call(make_params, tmp)
-  if ((!get_agg) | (chain != "ETH")){
-      miner_list <- call_glassnode_api(
-        path = glue::glue("/v1/metrics/mining/revenue_sum/miners"), miner_params
-      )
-    miner_list <- unlist(miner_list[[chain]])
+  # Note: The /miners endpoint appears to be unavailable in the current API
+  # For now, we only support aggregated miner data
+  if (get_agg) {
+    # User wants only aggregated data
+    miner_list <- "aggregated"
   } else {
-    miner_list <-  "aggregated"
+    # User wants all miners - but the /miners endpoint returns 404
+    # So we fall back to just aggregated for now
+    warning("Individual miner data endpoint is currently unavailable. Returning aggregated data only.")
+    miner_list <- "aggregated"
   }
   x <- purrr::map(miner_list,get_miner_rev,chain=chain,since=since,until=until,
                 frequency=frequency,currency=currency,api_key=api_key,
@@ -74,9 +75,10 @@ get_miner_rev <- function(miner="aggregated",
               "miner" = miner,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mining/revenue_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mining/revenue_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{miner}} :=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -112,17 +114,18 @@ get_vol_miners <- function(since=NULL,until=NULL,
                                get_agg=TRUE,
                                api_key = Sys.getenv("GN_API_KEY"),
                                as_date=TRUE){
-  tmp <- list("api_key" = api_key)
-  miner_params <- do.call(make_params, tmp)
-  if ((!get_agg)){
-    miner_list <- call_glassnode_api(
-      path = glue::glue("/v1/metrics/mining/volume_mined_sum/miners"), miner_params
-    )
-    miner_list <- unlist(miner_list)
+  # Note: The /miners endpoint appears to be unavailable in the current API
+  # For now, we only support aggregated miner data
+  if (get_agg) {
+    # User wants only aggregated data
+    miner_list <- "aggregated"
   } else {
-    miner_list <-  "aggregated"
+    # User wants all miners - but the /miners endpoint returns 404
+    # So we fall back to just aggregated for now
+    warning("Individual miner data endpoint is currently unavailable. Returning aggregated data only.")
+    miner_list <- "aggregated"
   }
-  x <- purrr::map(miner_list,get_miner_rev,since=since,until=until,
+  x <- purrr::map(miner_list,get_miner_vol,since=since,until=until,
                        frequency=frequency,api_key=api_key,
                        as_date=as_date) |> plyr::join_all(by="date") |>
     tibble::as_tibble()
@@ -147,9 +150,10 @@ get_miner_vol <- function(miner="aggregated",
               "miner" = miner,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mining/volume_mined_sum"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mining/volume_mined_sum")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{miner}} :=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

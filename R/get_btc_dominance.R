@@ -26,9 +26,10 @@ get_btc_dominance <- function(since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/market/btc_dominance"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/market/btc_dominance")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, btc_dominance=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

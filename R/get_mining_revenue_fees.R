@@ -28,9 +28,10 @@ get_mining_revenue_fees <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/mining/revenue_from_fees"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/mining/revenue_from_fees")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fee_revenue_pct=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

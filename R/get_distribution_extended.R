@@ -25,9 +25,10 @@ get_exchange_net_position_change <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/distribution/exchange_net_position_change", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/distribution/exchange_net_position_change"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, exchange_net_position_change=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -64,9 +65,10 @@ get_miner_balance <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/distribution/balance_miners", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/distribution/balance_miners"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, miner_balance=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -103,9 +105,10 @@ get_miner_net_position_change <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/distribution/miner_net_position_change", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/distribution/miner_net_position_change"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, miner_net_position_change=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -142,9 +145,10 @@ get_gini_coefficient <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/distribution/gini", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/distribution/gini"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, gini_coefficient=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -181,9 +185,10 @@ get_herfindahl_index <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/distribution/herfindahl", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/distribution/herfindahl"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, herfindahl_index=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))

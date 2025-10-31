@@ -25,9 +25,10 @@ get_liquid_supply <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/liquid", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/liquid"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, liquid_supply=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -64,9 +65,10 @@ get_illiquid_supply <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/illiquid", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/illiquid"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, illiquid_supply=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -103,9 +105,10 @@ get_lth_supply <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/lth", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/lth"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, lth_supply=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -142,9 +145,10 @@ get_sth_supply <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/sth", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/sth"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, sth_supply=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -181,9 +185,10 @@ get_supply_in_profit <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/profit", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/profit"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, supply_in_profit=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -220,9 +225,10 @@ get_supply_in_loss <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/loss", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/loss"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, supply_in_loss=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -259,9 +265,10 @@ get_percent_supply_in_profit <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/supply/profit_relative", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/supply/profit_relative"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, percent_supply_in_profit=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))

@@ -25,9 +25,10 @@ get_mempool_fees_average_relative <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/mempool/fees_average_relative", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/mempool/fees_average_relative"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fees_average_relative=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -64,9 +65,10 @@ get_mempool_fees_median_relative <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/mempool/fees_median_relative", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/mempool/fees_median_relative"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fees_median_relative=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -103,9 +105,10 @@ get_mempool_value_distribution <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/mempool/txs_value_distribution", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/mempool/txs_value_distribution"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, value_distribution=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -142,9 +145,10 @@ get_mempool_fees_distribution <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/mempool/fees_distribution", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/mempool/fees_distribution"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fees_distribution=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -181,9 +185,10 @@ get_mempool_txs_count_distribution <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/mempool/txs_count_distribution", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/mempool/txs_count_distribution"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, txs_count_distribution=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -220,9 +225,10 @@ get_mempool_txs_size_distribution <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/mempool/txs_size_distribution", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/mempool/txs_size_distribution"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, txs_size_distribution=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))

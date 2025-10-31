@@ -31,9 +31,10 @@ get_percent_exchange_balance <- function(asset="BTC",since=NULL,until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   var_name <- glue::glue({{asset}},"_pct")
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/distribution/balance_exchanges_relative"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/distribution/balance_exchanges_relative")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{var_name}} := v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

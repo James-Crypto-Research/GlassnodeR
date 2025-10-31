@@ -33,9 +33,10 @@ get_all_exchange_balance <- function(asset="BTC",since=NULL,until=NULL,
               "c" = currency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/distribution/balance_exchanges_all"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/distribution/balance_exchanges_all")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t) |>
     tidyr::unnest(cols=c(o)) |>

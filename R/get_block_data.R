@@ -33,9 +33,10 @@ get_block_height <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/blockchain/block_height"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/block_height")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, block_height=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -57,9 +58,10 @@ get_block_interval_mean <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/blockchain/block_interval_mean"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/block_interval_mean")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, block_interval_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -81,9 +83,10 @@ get_block_interval_median <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/blockchain/block_interval_median"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/block_interval_median")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, block_interval_median=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -105,9 +108,10 @@ get_block_size_mean <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/blockchain/block_size_mean"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/block_size_mean")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, block_size_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
@@ -129,9 +133,10 @@ get_blocks_count <- function(asset="BTC",since=NULL,until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/blockchain/block_count"), params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/block_count")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, blocks_count=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))

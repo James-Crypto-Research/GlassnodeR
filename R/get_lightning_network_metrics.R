@@ -25,9 +25,10 @@ get_lightning_base_fee <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/base_fee_median", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/base_fee_median"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, base_fee_median=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -64,9 +65,10 @@ get_lightning_network_capacity <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/network_capacity_sum", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/network_capacity_sum"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, network_capacity=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -103,9 +105,10 @@ get_lightning_channel_size_mean <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/channel_size_mean", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/channel_size_mean"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, channel_size_mean=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -142,9 +145,10 @@ get_lightning_channel_size_median <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/channel_size_median", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/channel_size_median"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, channel_size_median=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -181,9 +185,10 @@ get_lightning_fee_rate <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/fee_rate_median", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/fee_rate_median"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, fee_rate_median=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -220,9 +225,10 @@ get_lightning_gini_capacity <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/gini_capacity_distribution", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/gini_capacity_distribution"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, gini_capacity_distribution=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -259,9 +265,10 @@ get_lightning_gini_channels <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/gini_channel_distribution", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/gini_channel_distribution"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, gini_channel_distribution=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -298,9 +305,10 @@ get_lightning_node_connectivity <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/node_connectivity", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/node_connectivity"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, node_connectivity=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -337,9 +345,10 @@ get_lightning_channels_count <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/channels_count", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/channels_count"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, channels_count=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
@@ -376,9 +385,10 @@ get_lightning_nodes_count <- function(since=NULL, until=NULL,
               "i" = frequency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
-  x <- call_glassnode_api(
-    path = "v1/metrics/lightning/nodes_count", params
-  ) |>
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/lightning/nodes_count"),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, nodes_count=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
