@@ -62,7 +62,8 @@ get_btc_dominance <- function(since=NULL,until=NULL,
                               frequency="24h",
                               api_key = Sys.getenv("GN_API_KEY"),
                               as_date=TRUE){
-  tmp <- list("s" = since,
+  tmp <- list("a" = "BTC",
+              "s" = since,
               "u" = until,
               "i" = frequency,
               "api_key" = api_key)

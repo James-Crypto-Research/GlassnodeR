@@ -26,7 +26,7 @@ get_liquid_supply <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/supply/liquid"),
+    list(path = "v1/metrics/supply/liquid_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -66,7 +66,7 @@ get_illiquid_supply <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/supply/illiquid"),
+    list(path = "v1/metrics/supply/illiquid_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -106,7 +106,7 @@ get_lth_supply <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/supply/lth"),
+    list(path = "v1/metrics/supply/lth_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -146,7 +146,7 @@ get_sth_supply <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/supply/sth"),
+    list(path = "v1/metrics/supply/sth_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -186,7 +186,7 @@ get_supply_in_profit <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/supply/profit"),
+    list(path = "v1/metrics/supply/profit_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -226,7 +226,7 @@ get_supply_in_loss <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/supply/loss"),
+    list(path = "v1/metrics/supply/loss_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -341,18 +341,20 @@ get_provably_lost_coins <- function(asset="BTC", since=NULL, until=NULL, frequen
                                    api_key = Sys.getenv("GN_API_KEY"),
                                    as_date=TRUE) {
   tmp_name <- glue::glue("{asset}_provably_lost")
-  x <- call_glassnode_api(
-    path = glue::glue("v1/metrics/supply/probably_lost"), 
-    a = asset,
-    s = since,
-    u = until,
-    i = frequency,
-    api_key = api_key
-  ) |>
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/supply/provably_lost")),
+    params
+  )) |>
     tibble::as_tibble() |>
     dplyr::rename(date=t, {{tmp_name}} :=v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
-  
+
   if (as_date & (frequency %in% c("24h"))) {
     x$date <- as.Date(x$date)
   }

@@ -11,16 +11,17 @@ Description: This package uses the users API key to download various aspects of
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: 
-  dplyr, 
-  glue, 
-  httr, 
-  jsonlite, 
+Imports:
+  dplyr,
+  forcats,
+  glue,
+  httr,
+  jsonlite,
   lubridate,
-  plyr, 
+  plyr,
   purrr,
-  rlang, 
-  tibble, 
+  rlang,
+  tibble,
   tidyr,
 RoxygenNote: 7.3.2
 Suggests: 
