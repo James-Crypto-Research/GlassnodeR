@@ -75,11 +75,14 @@ get_bridge_deposits <- function(asset = "ETH",
 
 get_tvl <- function(since=NULL,until=NULL,api_key = Sys.getenv("GN_API_KEY")){
     tmp <- list("a" = "eth",
-                path = "v1/metrics/defi/total_value_locked",
-                "api_key" = api_key,
                 "s" = since,
-                "u" = until)
-    x <- do.call(call_glassnode_api, tmp)
+                "u" = until,
+                "api_key" = api_key)
+    params <- do.call(make_params, tmp)
+    x <- do.call(call_glassnode_api, c(
+      list(path = "v1/metrics/defi/total_value_locked"),
+      params
+    ))
     x <- x |>  tibble::as_tibble() |>
       dplyr::rename(date=t,tvl=v) |>
       dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01", tz="UTC")))

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(Rscript:*)",
+      "Bash(echo:*)",
+      "Bash(cmd.exe /c \"echo %GN_API_KEY%\")",
+      "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('GN_API_KEY', 'User'\\)\":*)",
+      "Bash(powershell:*)",
+      "WebFetch(domain:docs.glassnode.com)"
+    ]
+  }
+}

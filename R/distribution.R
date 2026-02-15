@@ -66,7 +66,7 @@ get_miner_balance <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/distribution/balance_miners"),
+    list(path = "v1/metrics/distribution/balance_miners_sum"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -106,7 +106,7 @@ get_miner_net_position_change <- function(since=NULL, until=NULL,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
-    list(path = "v1/metrics/distribution/miner_net_position_change"),
+    list(path = "v1/metrics/distribution/balance_miners_change"),
     params
   )) |>
     tibble::as_tibble() |>
@@ -135,11 +135,11 @@ get_miner_net_position_change <- function(since=NULL, until=NULL,
 #' #Need a valid API key to run
 #' x <- get_gini_coefficient()
 #' }
-get_gini_coefficient <- function(since=NULL, until=NULL,
+get_gini_coefficient <- function(asset="ETH", since=NULL, until=NULL,
                                  frequency="24h",
                                  api_key = Sys.getenv("GN_API_KEY"),
                                  as_date=TRUE){
-  tmp <- list("a" = "btc",
+  tmp <- list("a" = asset,
               "s" = since,
               "u" = until,
               "i" = frequency,
@@ -175,11 +175,11 @@ get_gini_coefficient <- function(since=NULL, until=NULL,
 #' #Need a valid API key to run
 #' x <- get_herfindahl_index()
 #' }
-get_herfindahl_index <- function(since=NULL, until=NULL,
+get_herfindahl_index <- function(asset="ETH", since=NULL, until=NULL,
                                  frequency="24h",
                                  api_key = Sys.getenv("GN_API_KEY"),
                                  as_date=TRUE){
-  tmp <- list("a" = "btc",
+  tmp <- list("a" = asset,
               "s" = since,
               "u" = until,
               "i" = frequency,
@@ -228,11 +228,11 @@ get_hodl_wave <- function(asset="BTC",since=NULL,until=NULL,
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   y <- x$o
   y$date <- as.Date(x$date)
-  x <- y |> relocate(date) |>
-    pivot_longer(-date,names_to="duration", values_to="amount") |>
-    mutate(amount = replace_na(amount, 0)) |>
-    mutate(duration = as_factor(duration)) |>
-    mutate(duration = fct_relevel(duration,
+  x <- y |> dplyr::relocate(date) |>
+    tidyr::pivot_longer(-date, names_to="duration", values_to="amount") |>
+    dplyr::mutate(amount = tidyr::replace_na(amount, 0)) |>
+    dplyr::mutate(duration = forcats::as_factor(duration)) |>
+    dplyr::mutate(duration = forcats::fct_relevel(duration,
                                   "more_10y","7y_10y","5y_7y",
                                   "3y_5y","2y_3y","1y_2y",
                                   "6m_12m","3m_6m","1m_3m",

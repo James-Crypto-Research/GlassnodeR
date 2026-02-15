@@ -15,9 +15,10 @@
 call_lightning_api <- function(var_name,
                                 params){
 
-  return_val <- call_glassnode_api(
-    path= glue::glue( "v1/metrics/lightning/", var_name),params
-  ) |> tibble::as_tibble() |>
+  return_val <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/lightning/", var_name)),
+    params
+  )) |> tibble::as_tibble() |>
     dplyr::rename(date=t,{{var_name}}:= v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01", tz="UTC"))
   unames <- names(return_val)[2]
