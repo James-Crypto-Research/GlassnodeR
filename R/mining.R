@@ -15,7 +15,7 @@
 #'
 #'
 #'
-#' @param chain The chain to use ("BTC" or "ETH")
+#' @param asset The chain to use ("BTC" or "ETH")
 #' @param since The date to start the extraction
 #' @param until The date to end the extraction
 #' @param frequency What frequency to pull (either "1h" or "24h")
@@ -28,7 +28,7 @@
 #' @return This returns a
 #' @export
 #'
-get_revenue_miners <- function(chain="BTC",
+get_revenue_miners <- function(asset="BTC",
                                since=NULL,until=NULL,
                                         frequency="24h",
                                         get_agg=TRUE,
@@ -46,7 +46,7 @@ get_revenue_miners <- function(chain="BTC",
     warning("Individual miner data endpoint is currently unavailable. Returning aggregated data only.")
     miner_list <- "aggregated"
   }
-  x <- purrr::map(miner_list,get_miner_rev,chain=chain,since=since,until=until,
+  x <- purrr::map(miner_list,get_miner_rev,chain=asset,since=since,until=until,
                 frequency=frequency,currency=currency,api_key=api_key,
                 as_date=as_date) |> plyr::join_all(by="date") |>
     tibble::as_tibble()
