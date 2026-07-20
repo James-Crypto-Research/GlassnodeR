@@ -200,16 +200,18 @@ get_herfindahl_index <- function(asset="ETH", since=NULL, until=NULL,
 
 #' Return the HODL waves for BTC or ETH
 #'
-#' @param asset
-#' @param since
-#' @param until
-#' @param api_key
+#' @param asset Asset to examine (BTC or ETH)
+#' @param since The start date
+#' @param until The end date
+#' @param api_key The api key. It looks in the env variable GN_API_KEY if not set
 #'
-#' @return a Tibble with the waves as columns
+#' @return a tibble in long format with columns date, duration, and amount (share of circulating supply)
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' x <- get_hodl_wave()
+#' }
 get_hodl_wave <- function(asset="BTC",since=NULL,until=NULL,
                                   api_key = Sys.getenv("GN_API_KEY")) {
   tmp <- list("a" = asset,
@@ -217,14 +219,13 @@ get_hodl_wave <- function(asset="BTC",since=NULL,until=NULL,
               "u" = until,
               "i" = "24h",
               "api_key" = api_key)
-  tmp_name <- glue::glue({{asset}},"_tx_rate")
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
     list(path = glue::glue("v1/metrics/supply/hodl_waves")),
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, {{tmp_name}} :=v) |>
+    dplyr::rename(date=t) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   y <- x$o
   y$date <- as.Date(x$date)
@@ -252,11 +253,11 @@ t <- asset <- NULL
 #' the largest top 1% of balances. Smart contracts, exchanges and other identified
 #' wallets are excluded.
 #'
-#' NOTE: FOr BTC this is entities (cluster of wallets) for others this is wallets
+#' NOTE: this metric does not cover BTC; the asset must be ETH or an ERC-20/token ticker
 #'
 #'
 #' @param api_key The API key to use. By default it will check the API_KEY environmental variable
-#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param asset This is the asset to get information on (ETH or an ERC-20/token ticker; BTC is not supported by this endpoint). The list of available assets is on the GN API site
 #' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
@@ -269,7 +270,7 @@ t <- asset <- NULL
 #' #Need a valid API key to run
 #' x <- get_percent_top_balance()
 #' }
-get_percent_top_balance <- function(asset="BTC",since=NULL,until=NULL,
+get_percent_top_balance <- function(asset="ETH",since=NULL,until=NULL,
                                      frequency="24h",
                                      api_key = Sys.getenv("GN_API_KEY"),
                                      as_date=TRUE){

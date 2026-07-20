@@ -72,6 +72,66 @@ test_that("get_blocks_count returns valid data", {
   expect_valid_tibble(result)
 })
 
+test_that("get_block_size_sum returns valid data", {
+  skip_if_no_api_key()
+  result <- get_block_size_sum(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_count returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_count(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_created_count returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_created_count(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_spent_count returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_spent_count(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_created_value_mean returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_created_value_mean(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_created_value_median returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_created_value_median(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_created_value_sum returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_created_value_sum(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_spent_value_mean returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_spent_value_mean(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_spent_value_median returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_spent_value_median(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_utxo_spent_value_sum returns valid data", {
+  skip_if_no_api_key()
+  result <- get_utxo_spent_value_sum(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
 # ---- Market ----
 
 test_that("get_closing_price returns valid data", {
@@ -146,6 +206,84 @@ test_that("get_price_ohlc returns valid data", {
   expect_valid_tibble(result)
 })
 
+test_that("get_realized_price_usd returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_price_usd(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_sth_mvrv returns valid data", {
+  skip_if_no_api_key()
+  result <- get_sth_mvrv(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_1_week returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_1_week(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_2_weeks returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_2_weeks(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_1_month returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_1_month(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_3_months returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_3_months(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_6_months returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_6_months(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_1_year returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_1_year(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_realized_volatility_all returns valid data", {
+  skip_if_no_api_key()
+  result <- get_realized_volatility_all(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_price_correlation returns valid data", {
+  skip_if_no_api_key()
+  result <- get_price_correlation(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_price_beta returns valid data", {
+  skip_if_no_api_key()
+  result <- get_price_beta(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_spot_volume returns valid data", {
+  skip_if_no_api_key()
+  result <- get_spot_volume(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_spot_volume_mcap_ratio returns valid data", {
+  skip_if_no_api_key()
+  result <- get_spot_volume_mcap_ratio(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
 # ---- Supply ----
 
 test_that("get_liquid_supply returns valid data", {
@@ -211,6 +349,72 @@ test_that("get_supply_contracts returns valid data", {
 test_that("get_exchange_balance returns valid data", {
   skip_if_no_api_key()
   result <- get_exchange_balance(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_inflation_rate returns valid data", {
+  skip_if_no_api_key()
+  result <- get_inflation_rate(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_issued_supply returns valid data", {
+  skip_if_no_api_key()
+  result <- get_issued_supply(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_minted_supply returns valid data", {
+  skip_if_no_api_key()
+  result <- get_minted_supply(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_burned_supply returns valid data", {
+  skip_if_no_api_key()
+  result <- get_burned_supply(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_burn_rate returns valid data", {
+  skip_if_no_api_key()
+  result <- get_burn_rate(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_total_minted_supply returns valid data", {
+  skip_if_no_api_key()
+  result <- get_total_minted_supply(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_illiquid_supply_change returns valid data", {
+  skip_if_no_api_key()
+  result <- get_illiquid_supply_change(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_liquid_supply_change returns valid data", {
+  skip_if_no_api_key()
+  result <- get_liquid_supply_change(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_highly_liquid_supply returns valid data", {
+  skip_if_no_api_key()
+  result <- get_highly_liquid_supply(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_current_supply_adjusted returns valid data", {
+  skip_if_no_api_key()
+  result <- get_current_supply_adjusted(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_rcap_hodl_waves returns valid data", {
+  skip_if_no_api_key()
+  result <- get_rcap_hodl_waves(since = since_date, until = until_date)
   expect_valid_tibble(result)
 })
 
@@ -555,5 +759,185 @@ test_that("get_tvl returns valid data", {
 test_that("get_bridge_deposits returns valid data", {
   skip_if_no_api_key()
   result <- get_bridge_deposits(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+# ---- Derivatives ----
+
+test_that("get_futures_open_interest returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_open_interest(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_open_interest_perpetual returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_open_interest_perpetual(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_open_interest_crypto_margin returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_open_interest_crypto_margin(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_open_interest_cash_margin returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_open_interest_cash_margin(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_open_interest_cme returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_open_interest_cme(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_open_interest_mcap_ratio returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_open_interest_mcap_ratio(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_volume returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_volume(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_volume_perpetual returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_volume_perpetual(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_volume_cme returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_volume_cme(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_volume_mcap_ratio returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_volume_mcap_ratio(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_funding_rate returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_funding_rate(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_funding_rate_v2 returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_funding_rate_v2(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_liquidations returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_liquidations(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_liquidations_long returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_liquidations_long(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_liquidations_short returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_liquidations_short(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_estimated_leverage_ratio returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_estimated_leverage_ratio(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_futures_annualized_basis_3m returns valid data", {
+  skip_if_no_api_key()
+  result <- get_futures_annualized_basis_3m(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_perpetuals_reference_rate returns valid data", {
+  skip_if_no_api_key()
+  result <- get_perpetuals_reference_rate(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+# ---- Institutions ----
+
+test_that("get_etf_balances returns valid data", {
+  skip_if_no_api_key()
+  result <- get_etf_balances(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_etf_flows_net returns valid data", {
+  skip_if_no_api_key()
+  result <- get_etf_flows_net(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_etf_price returns valid data", {
+  skip_if_no_api_key()
+  result <- get_etf_price(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_etf_volume_total returns valid data", {
+  skip_if_no_api_key()
+  result <- get_etf_volume_total(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+# ---- Treasuries ----
+
+test_that("get_treasury_balance_companies returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_balance_companies(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_treasury_balance_governments returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_balance_governments(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_treasury_balance_relative_companies returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_balance_relative_companies(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_treasury_balance_relative_governments returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_balance_relative_governments(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_treasury_flows_net_companies returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_flows_net_companies(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_treasury_flows_net_governments returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_flows_net_governments(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_treasury_companies_count returns valid data", {
+  skip_if_no_api_key()
+  result <- get_treasury_companies_count(since = since_date, until = until_date)
   expect_valid_tibble(result)
 })

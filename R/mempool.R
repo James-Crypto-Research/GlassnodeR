@@ -210,7 +210,7 @@ get_mempool_fees_median_relative <- function(since=NULL, until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and value distribution
+#' @return Returns a tibble with a datetime column and one \code{value_distribution_<bucket>} column per relative-fee cohort (e.g. \code{0_1}, \code{1_2}, ..., \code{50_plus})
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -233,7 +233,8 @@ get_mempool_value_distribution <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, value_distribution=v) |>
+    dplyr::rename(date=t, value_distribution=o) |>
+    tidyr::unnest_wider(value_distribution, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)
@@ -250,7 +251,7 @@ get_mempool_value_distribution <- function(since=NULL, until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and fee distribution
+#' @return Returns a tibble with a datetime column and one \code{fees_distribution_<bucket>} column per relative-fee cohort (e.g. \code{0_1}, \code{1_2}, ..., \code{50_plus})
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -273,7 +274,8 @@ get_mempool_fees_distribution <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, fees_distribution=v) |>
+    dplyr::rename(date=t, fees_distribution=o) |>
+    tidyr::unnest_wider(fees_distribution, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)
@@ -290,7 +292,7 @@ get_mempool_fees_distribution <- function(since=NULL, until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and transaction count distribution
+#' @return Returns a tibble with a datetime column and one \code{txs_count_distribution_<bucket>} column per relative-fee cohort (e.g. \code{0_1}, \code{1_2}, ..., \code{50_plus})
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -313,7 +315,8 @@ get_mempool_txs_count_distribution <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, txs_count_distribution=v) |>
+    dplyr::rename(date=t, txs_count_distribution=o) |>
+    tidyr::unnest_wider(txs_count_distribution, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)
@@ -330,7 +333,7 @@ get_mempool_txs_count_distribution <- function(since=NULL, until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and transaction size distribution
+#' @return Returns a tibble with a datetime column and one \code{txs_size_distribution_<bucket>} column per relative-fee cohort (e.g. \code{0_1}, \code{1_2}, ..., \code{50_plus})
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -353,7 +356,8 @@ get_mempool_txs_size_distribution <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, txs_size_distribution=v) |>
+    dplyr::rename(date=t, txs_size_distribution=o) |>
+    tidyr::unnest_wider(txs_size_distribution, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)

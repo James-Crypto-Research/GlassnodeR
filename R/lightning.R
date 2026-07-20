@@ -22,7 +22,7 @@ call_lightning_api <- function(var_name,
     dplyr::rename(date=t,{{var_name}}:= v) |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01", tz="UTC"))
   unames <- names(return_val)[2]
-  return_val <- return_val |> tidyr::unnest(cols = unames)
+  return_val <- return_val |> tidyr::unnest(cols = dplyr::all_of(unames))
   return(return_val)
 }
 
