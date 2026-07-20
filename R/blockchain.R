@@ -145,3 +145,275 @@ get_blocks_count <- function(asset="BTC",since=NULL,until=NULL,
   }
   return(x)
 }
+
+#' @rdname get_block_data
+#' @export
+get_block_size_sum <- function(asset="BTC",since=NULL,until=NULL,
+                               frequency="24h",
+                               api_key = Sys.getenv("GN_API_KEY"),
+                               as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/block_size_sum")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, block_size_sum=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get UTXO Set Metrics
+#'
+#' These functions retrieve metrics describing the Unspent Transaction Output
+#' (UTXO) set: how many UTXOs exist, how many are created/spent per interval,
+#' and the value created/spent. These describe the raw economic throughput of
+#' UTXO-based blockchains (e.g. Bitcoin).
+#'
+#' @param api_key The API key to use. By default it will check the API_KEY environmental variable
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and UTXO metric
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_utxo_count()
+#' }
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_count <- function(asset="BTC",since=NULL,until=NULL,
+                           frequency="24h",
+                           api_key = Sys.getenv("GN_API_KEY"),
+                           as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_count")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_count=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_created_count <- function(asset="BTC",since=NULL,until=NULL,
+                                   frequency="24h",
+                                   api_key = Sys.getenv("GN_API_KEY"),
+                                   as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_created_count")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_created_count=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_spent_count <- function(asset="BTC",since=NULL,until=NULL,
+                                 frequency="24h",
+                                 api_key = Sys.getenv("GN_API_KEY"),
+                                 as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_spent_count")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_spent_count=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_created_value_mean <- function(asset="BTC",since=NULL,until=NULL,
+                                        frequency="24h",
+                                        api_key = Sys.getenv("GN_API_KEY"),
+                                        as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_created_value_mean")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_created_value_mean=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_created_value_median <- function(asset="BTC",since=NULL,until=NULL,
+                                          frequency="24h",
+                                          api_key = Sys.getenv("GN_API_KEY"),
+                                          as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_created_value_median")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_created_value_median=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_created_value_sum <- function(asset="BTC",since=NULL,until=NULL,
+                                       frequency="24h",
+                                       api_key = Sys.getenv("GN_API_KEY"),
+                                       as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_created_value_sum")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_created_value_sum=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_spent_value_mean <- function(asset="BTC",since=NULL,until=NULL,
+                                      frequency="24h",
+                                      api_key = Sys.getenv("GN_API_KEY"),
+                                      as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_spent_value_mean")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_spent_value_mean=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_spent_value_median <- function(asset="BTC",since=NULL,until=NULL,
+                                        frequency="24h",
+                                        api_key = Sys.getenv("GN_API_KEY"),
+                                        as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_spent_value_median")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_spent_value_median=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_utxo_count
+#' @export
+get_utxo_spent_value_sum <- function(asset="BTC",since=NULL,until=NULL,
+                                     frequency="24h",
+                                     api_key = Sys.getenv("GN_API_KEY"),
+                                     as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = glue::glue("v1/metrics/blockchain/utxo_spent_value_sum")),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, utxo_spent_value_sum=v) |>
+    dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}

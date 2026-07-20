@@ -457,7 +457,7 @@ get_median_mvrv <- function(since=NULL, until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and OHLC prices
+#' @return Returns a tibble with columns for the datetime and the open, high, low, and close prices
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -480,7 +480,454 @@ get_price_ohlc <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, price_ohlc=v) |>
+    dplyr::rename(date=t) |>
+    tidyr::unnest_wider(o) |>
+    dplyr::rename(open=o, high=h, low=l, close=c) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Realized Price
+#'
+#' Realized Price represents the aggregate acquisition cost basis across the
+#' total supply (Realized Cap divided by circulating supply). It differs from
+#' \code{get_realized_price()}, which returns the median rather than the
+#' aggregate realized price.
+#'
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and realized price
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_realized_price_usd()
+#' }
+get_realized_price_usd <- function(since=NULL, until=NULL,
+                                   frequency="24h",
+                                   api_key = Sys.getenv("GN_API_KEY"),
+                                   as_date=TRUE){
+  tmp <- list("a" = "btc",
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/price_realized_usd"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_price_usd=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get STH-MVRV (Short-Term Holder MVRV)
+#'
+#' MVRV ratio for Short-Term Holders (held for less than 155 days). Complements
+#' \code{get_lth_mvrv()}.
+#'
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and STH MVRV
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_sth_mvrv()
+#' }
+get_sth_mvrv <- function(since=NULL, until=NULL,
+                         frequency="24h",
+                         api_key = Sys.getenv("GN_API_KEY"),
+                         as_date=TRUE){
+  tmp <- list("a" = "btc",
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/mvrv_less_155"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, sth_mvrv=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Realized Volatility
+#'
+#' Realized (historical) price volatility computed over a rolling window. These
+#' functions are grouped by window length.
+#'
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and realized volatility. \code{get_realized_volatility_all()} instead returns one \code{realized_volatility_<window>} column per window (1w, 2w, 1m, 3m, 6m, 1y)
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_realized_volatility_1_month()
+#' }
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_1_week <- function(asset="BTC",since=NULL,until=NULL,
+                                           frequency="24h",
+                                           api_key = Sys.getenv("GN_API_KEY"),
+                                           as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_1_week"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_2_weeks <- function(asset="BTC",since=NULL,until=NULL,
+                                            frequency="24h",
+                                            api_key = Sys.getenv("GN_API_KEY"),
+                                            as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_2_weeks"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_1_month <- function(asset="BTC",since=NULL,until=NULL,
+                                            frequency="24h",
+                                            api_key = Sys.getenv("GN_API_KEY"),
+                                            as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_1_month"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_3_months <- function(asset="BTC",since=NULL,until=NULL,
+                                             frequency="24h",
+                                             api_key = Sys.getenv("GN_API_KEY"),
+                                             as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_3_months"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_6_months <- function(asset="BTC",since=NULL,until=NULL,
+                                             frequency="24h",
+                                             api_key = Sys.getenv("GN_API_KEY"),
+                                             as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_6_months"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_1_year <- function(asset="BTC",since=NULL,until=NULL,
+                                           frequency="24h",
+                                           api_key = Sys.getenv("GN_API_KEY"),
+                                           as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_1_year"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_realized_volatility_1_week
+#' @export
+get_realized_volatility_all <- function(asset="BTC",since=NULL,until=NULL,
+                                        frequency="24h",
+                                        api_key = Sys.getenv("GN_API_KEY"),
+                                        as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/realized_volatility_all"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, realized_volatility=o) |>
+    tidyr::unnest_wider(realized_volatility, names_sep = "_") |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Price Correlation with BTC
+#'
+#' The 7-day rolling Pearson correlation between an asset's price and BTC's price.
+#'
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and correlation to BTC
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_price_correlation()
+#' }
+get_price_correlation <- function(asset="ETH",since=NULL,until=NULL,
+                                  frequency="24h",
+                                  api_key = Sys.getenv("GN_API_KEY"),
+                                  as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/correlation_btc_7d"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, correlation_btc_7d=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Price Beta to BTC
+#'
+#' The 7-day rolling beta of an asset's price relative to BTC's price.
+#'
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and beta to BTC
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_price_beta()
+#' }
+get_price_beta <- function(asset="ETH",since=NULL,until=NULL,
+                           frequency="24h",
+                           api_key = Sys.getenv("GN_API_KEY"),
+                           as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/beta_btc_7d"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, beta_btc_7d=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Spot Trading Volume
+#'
+#' The total daily spot trading volume across tracked exchanges.
+#'
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and spot volume
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_spot_volume()
+#' }
+get_spot_volume <- function(asset="BTC",since=NULL,until=NULL,
+                            frequency="24h",
+                            api_key = Sys.getenv("GN_API_KEY"),
+                            as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/spot_volume_daily_sum"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, spot_volume=v) |>
+    dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
+  if (as_date & frequency == "24h"){
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Spot Volume to Marketcap Ratio
+#'
+#' The ratio of daily spot trading volume to market capitalization, a measure of
+#' relative liquidity/turnover.
+#'
+#' @param asset This is the asset to get information on. The list of available assets is on the GN API site
+#' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
+#' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param as_date A logical to return a date-time object or a date object for daily observations
+#'
+#' @return Returns a tibble with columns for the datetime and spot volume/marketcap ratio
+#' @export
+#' @importFrom rlang :=
+#' @examples
+#' \dontrun{
+#' #Need a valid API key to run
+#' x <- get_spot_volume_mcap_ratio()
+#' }
+get_spot_volume_mcap_ratio <- function(asset="BTC",since=NULL,until=NULL,
+                                       frequency="24h",
+                                       api_key = Sys.getenv("GN_API_KEY"),
+                                       as_date=TRUE){
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/spot_volume_mcap_ratio"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date=t, spot_volume_mcap_ratio=v) |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)

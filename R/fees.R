@@ -9,7 +9,7 @@
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and fee metrics
+#' @return Returns a tibble with columns for the datetime and fee metrics. \code{get_exchange_fees()} instead returns one \code{exchange_fees_<deposit|withdrawal|inhouse|inter|total>} column per exchange-fee category
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -112,7 +112,8 @@ get_exchange_fees <- function(asset="BTC",since=NULL,until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, exchange_fees=v) |>
+    dplyr::rename(date=t, exchange_fees=o) |>
+    tidyr::unnest_wider(exchange_fees, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date,origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)
@@ -129,7 +130,7 @@ get_exchange_fees <- function(asset="BTC",since=NULL,until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and exchange fee dominance
+#' @return Returns a tibble with a datetime column and one \code{exchange_fee_dominance_<deposit|withdrawal|inhouse|inter|total>} column per exchange-fee category
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -152,7 +153,8 @@ get_exchange_fee_dominance <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, exchange_fee_dominance=v) |>
+    dplyr::rename(date=t, exchange_fee_dominance=o) |>
+    tidyr::unnest_wider(exchange_fee_dominance, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)
@@ -169,7 +171,7 @@ get_exchange_fee_dominance <- function(since=NULL, until=NULL,
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
-#' @return Returns a tibble with columns for the datetime and mean exchange fees
+#' @return Returns a tibble with a datetime column and one \code{exchange_fees_mean_<deposit|withdrawal|inhouse|inter|total>} column per exchange-fee category
 #' @export
 #' @importFrom rlang :=
 #' @examples
@@ -192,7 +194,8 @@ get_exchange_fees_mean <- function(since=NULL, until=NULL,
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date=t, exchange_fees_mean=v) |>
+    dplyr::rename(date=t, exchange_fees_mean=o) |>
+    tidyr::unnest_wider(exchange_fees_mean, names_sep = "_") |>
     dplyr::mutate(date=as.POSIXct(date, origin="1970-01-01 00:00:00", tz="UTC"))
   if (as_date & frequency == "24h"){
     x$date <- as.Date(x$date)

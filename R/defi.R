@@ -11,7 +11,7 @@ t <- v <- NULL
 #' @param api_key API key for Glassnode (defaults to environment variable)
 #' @param as_date Logical to return Date instead of POSIXct for daily frequency
 #'
-#' @return A tibble with date and bridge deposit data
+#' @return A tibble with a datetime column and one deposit column per bridge chain (prefixed \code{deposits_})
 #' @export
 #'
 #' @examples
@@ -39,16 +39,14 @@ get_bridge_deposits <- function(asset = "ETH",
     api_key = api_key
   )
 
-  # Create dynamic column name
-  tmp_name <- glue::glue("{asset}_bridge_deposits")
-
   # Call API with dynamic parameters
   x <- do.call(call_glassnode_api, c(
     list(path = "v1/metrics/bridges/deposits_by_chain"),
     params
   )) |>
     tibble::as_tibble() |>
-    dplyr::rename(date = t, {{tmp_name}} := v) |>
+    dplyr::rename(date = t, deposits = o) |>
+    tidyr::unnest_wider(deposits, names_sep = "_") |>
     dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
 
   # Convert to Date if specified
