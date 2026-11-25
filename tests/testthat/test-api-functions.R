@@ -1,12 +1,13 @@
 # Test all exported get_* functions against the live Glassnode API
 # Uses a narrow date range to minimize data transfer and API usage
 
-# Skip all tests if no API key is available
+# Skip all live API tests if no API key is available or offline
 skip_if_no_api_key <- function() {
   key <- Sys.getenv("GN_API_KEY")
   if (is.null(key) || nchar(key) == 0) {
     skip("GN_API_KEY not set")
   }
+  skip_if_offline("api.glassnode.com")
 }
 
 # Common test parameters - just 1 day of data
@@ -939,5 +940,94 @@ test_that("get_treasury_flows_net_governments returns valid data", {
 test_that("get_treasury_companies_count returns valid data", {
   skip_if_no_api_key()
   result <- get_treasury_companies_count(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+
+# ---- Stablecoin & Metadata Endpoints ----
+
+test_that("get_stablecoin_assets returns valid data", {
+  skip_if_no_api_key()
+  result <- get_stablecoin_assets()
+  expect_s3_class(result, "tbl_df")
+  expect_true(nrow(result) > 0)
+})
+
+test_that("get_metrics returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_metrics(asset = "USDT")
+  expect_s3_class(result, "tbl_df")
+  expect_true(nrow(result) > 0)
+})
+
+test_that("get_stablecoin_marketcap returns valid data", {
+  skip_if_no_api_key()
+  result <- get_stablecoin_marketcap(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_ssr returns valid data", {
+  skip_if_no_api_key()
+  result <- get_ssr(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_ssr_oscillator returns valid data", {
+  skip_if_no_api_key()
+  result <- get_ssr_oscillator(since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_velocity returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_velocity(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_transfers_count returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_transfers_count(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_transfers_volume_sum returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_transfers_volume_sum(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_exchange_inflows_sum returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_exchange_inflows_sum(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_exchange_outflows_sum returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_exchange_outflows_sum(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_exchange_withdrawals_count returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_exchange_withdrawals_count(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_non_zero_addresses returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_non_zero_addresses(asset = "USDT", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_addresses_min_usd returns valid data for USDT", {
+  skip_if_no_api_key()
+  result <- get_addresses_min_usd(asset = "USDT", threshold = "1k", since = since_date, until = until_date)
+  expect_valid_tibble(result)
+})
+
+test_that("get_bridge_net_flows returns valid data for USDC", {
+  skip_if_no_api_key()
+  result <- get_bridge_net_flows(asset = "USDC", since = since_date, until = until_date)
   expect_valid_tibble(result)
 })

@@ -86,3 +86,128 @@ get_tvl <- function(since=NULL,until=NULL,api_key = Sys.getenv("GN_API_KEY")){
       dplyr::mutate(date=as.Date(as.POSIXct(date,origin="1970-01-01", tz="UTC")))
     return(x)
   }
+
+#' Get Cross-Chain Bridge Withdrawals, Net Flows, and TVL by Chain
+#'
+#' Retrieves cross-chain bridge metrics segmented by target blockchain,
+#' complementing \code{\link{get_bridge_deposits}}. Useful for tracking
+#' cross-chain stablecoin migration across L1/L2 ecosystems.
+#'
+#' @param asset Asset ticker to query (defaults to \code{"USDC"})
+#' @param since Optional start date for data retrieval
+#' @param until Optional end date for data retrieval
+#' @param frequency Frequency of data points (defaults to \code{"24h"})
+#' @param api_key API key for Glassnode (defaults to GN_API_KEY environment
+#'   variable)
+#' @param as_date Logical to return Date instead of POSIXct for daily frequency
+#'
+#' @return A tibble with a \code{date} column and one column per bridge chain
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- get_bridge_net_flows("USDC")
+#' y <- get_bridge_tvl("USDT")
+#' }
+#' @rdname get_bridge_metrics
+get_bridge_withdrawals <- function(asset = "USDC",
+                                   since = NULL,
+                                   until = NULL,
+                                   frequency = "24h",
+                                   api_key = Sys.getenv("GN_API_KEY"),
+                                   as_date = TRUE) {
+  if (!is.character(asset) || nchar(asset) == 0) {
+    stop("Asset must be a non-empty character string")
+  }
+  params <- make_params(a = asset, s = since, u = until, i = frequency, api_key = api_key)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/bridges/withdrawals_by_chain"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, withdrawals = o) |>
+    tidyr::unnest_wider(withdrawals, names_sep = "_") |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_bridge_metrics
+#' @export
+get_bridge_net_flows <- function(asset = "USDC",
+                                 since = NULL,
+                                 until = NULL,
+                                 frequency = "24h",
+                                 api_key = Sys.getenv("GN_API_KEY"),
+                                 as_date = TRUE) {
+  if (!is.character(asset) || nchar(asset) == 0) {
+    stop("Asset must be a non-empty character string")
+  }
+  params <- make_params(a = asset, s = since, u = until, i = frequency, api_key = api_key)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/bridges/net_volume_by_chain"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, net_volume = o) |>
+    tidyr::unnest_wider(net_volume, names_sep = "_") |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_bridge_metrics
+#' @export
+get_bridge_tvl <- function(asset = "USDC",
+                           since = NULL,
+                           until = NULL,
+                           frequency = "24h",
+                           api_key = Sys.getenv("GN_API_KEY"),
+                           as_date = TRUE) {
+  if (!is.character(asset) || nchar(asset) == 0) {
+    stop("Asset must be a non-empty character string")
+  }
+  params <- make_params(a = asset, s = since, u = until, i = frequency, api_key = api_key)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/bridges/total_value_locked_by_chain"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, tvl_by_chain = o) |>
+    tidyr::unnest_wider(tvl_by_chain, names_sep = "_") |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_bridge_metrics
+#' @export
+get_bridge_tvl_relative <- function(asset = "USDC",
+                                    since = NULL,
+                                    until = NULL,
+                                    frequency = "24h",
+                                    api_key = Sys.getenv("GN_API_KEY"),
+                                    as_date = TRUE) {
+  if (!is.character(asset) || nchar(asset) == 0) {
+    stop("Asset must be a non-empty character string")
+  }
+  params <- make_params(a = asset, s = since, u = until, i = frequency, api_key = api_key)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/bridges/total_value_locked_by_chain_relative"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, tvl_relative = o) |>
+    tidyr::unnest_wider(tvl_relative, names_sep = "_") |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}

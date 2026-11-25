@@ -9,7 +9,7 @@
 \alias{get_sending_addresses}
 \alias{get_total_addresses}
 \alias{get_active_addresses}
-\title{#' Get all addresses statistics during the period}
+\title{Get all addresses statistics during the period}
 \usage{
 get_addresses(
   asset = "BTC",
@@ -102,7 +102,7 @@ or lower frequency}
 return a tibble with the date and the addresses
 }
 \description{
-#' Get all addresses statistics during the period
+Get all addresses statistics during the period
 }
 \examples{
 \dontrun{

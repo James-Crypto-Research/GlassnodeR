@@ -4,10 +4,10 @@
 \alias{make_params}
 \title{Prepare parameters for Glassnode API}
 \usage{
-make_params(api_key = Sys.getenv("GN_API_KEY"), ...)
+make_params(api_key = get_default_api_key(), ...)
 }
 \arguments{
-\item{api_key}{API key (defaults to environment variable)}
+\item{api_key}{API key (defaults to `GN_API_KEY` or `GLASSNODE_API_KEY`)}
 
 \item{...}{Additional parameters for the API call}
 }

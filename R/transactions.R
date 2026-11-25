@@ -324,3 +324,242 @@ get_volume_entity_adjusted <- function(asset="BTC",since=NULL,until=NULL,
   }
   return(x)
 }
+
+
+#' Get Raw Transfer Count and Volume Metrics
+#'
+#' Retrieves unadjusted on-chain token transfer counts and transfer volumes
+#' (total, mean, median). Particularly useful for ERC-20 tokens and stablecoins
+#' where UTXO change-adjusted metrics do not apply.
+#'
+#' @param asset Asset ticker to query (defaults to \code{"USDT"})
+#' @param since,until A POSIX compatible date-time object or date string
+#' @param frequency A resolution for the data (defaults to \code{"24h"})
+#' @param currency Currency denomination: \code{"USD"} or \code{"NATIVE"}
+#'   (defaults to \code{"USD"})
+#' @param api_key The API key to use. By default it checks the GN_API_KEY
+#'   environment variable
+#' @param as_date A logical to return a Date object for daily observations
+#'
+#' @return A tibble with columns \code{date} and the requested transfer metric
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- get_transfers_volume_sum(asset = "USDC")
+#' y <- get_transfers_count(asset = "USDT")
+#' }
+#' @rdname get_transfers
+get_transfers_count <- function(asset = "USDT", since = NULL, until = NULL,
+                                frequency = "24h",
+                                api_key = Sys.getenv("GN_API_KEY"),
+                                as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_count"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, transfers_count = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_transfers
+#' @export
+get_transfers_volume_sum <- function(asset = "USDT", since = NULL, until = NULL,
+                                     frequency = "24h",
+                                     currency = "USD",
+                                     api_key = Sys.getenv("GN_API_KEY"),
+                                     as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "c" = currency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_volume_sum"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, transfers_volume_sum = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_transfers
+#' @export
+get_transfers_volume_mean <- function(asset = "USDT", since = NULL, until = NULL,
+                                      frequency = "24h",
+                                      currency = "USD",
+                                      api_key = Sys.getenv("GN_API_KEY"),
+                                      as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "c" = currency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_volume_mean"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, transfers_volume_mean = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_transfers
+#' @export
+get_transfers_volume_median <- function(asset = "USDT", since = NULL, until = NULL,
+                                        frequency = "24h",
+                                        currency = "USD",
+                                        api_key = Sys.getenv("GN_API_KEY"),
+                                        as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "c" = currency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_volume_median"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, transfers_volume_median = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' Get Total Exchange Inflow, Outflow, and Withdrawal Count Metrics
+#'
+#' Retrieves total (sum) exchange inflow and outflow volumes as well as
+#' exchange withdrawal counts, complementing the mean flow functions in
+#' \code{\link{get_exchange_inflows}}.
+#'
+#' @param asset Asset ticker to query (defaults to \code{"USDT"})
+#' @param since,until A POSIX compatible date-time object or date string
+#' @param frequency A resolution for the data (defaults to \code{"24h"})
+#' @param exchange Exchange filter (defaults to \code{"aggregated"})
+#' @param currency Currency denomination: \code{"USD"} or \code{"NATIVE"}
+#'   (defaults to \code{"USD"})
+#' @param api_key The API key to use. By default it checks the GN_API_KEY
+#'   environment variable
+#' @param as_date A logical to return a Date object for daily observations
+#'
+#' @return A tibble with columns \code{date} and the requested exchange flow
+#'   metric
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' inflows <- get_exchange_inflows_sum(asset = "USDC")
+#' outflows <- get_exchange_outflows_sum(asset = "USDC")
+#' withdrawals <- get_exchange_withdrawals_count(asset = "USDC")
+#' }
+#' @rdname get_exchange_flow_totals
+get_exchange_inflows_sum <- function(asset = "USDT", since = NULL, until = NULL,
+                                     frequency = "24h",
+                                     exchange = "aggregated",
+                                     currency = "USD",
+                                     api_key = Sys.getenv("GN_API_KEY"),
+                                     as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "e" = exchange,
+              "c" = currency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_volume_to_exchanges_sum"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, exchange_inflows_sum = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_exchange_flow_totals
+#' @export
+get_exchange_outflows_sum <- function(asset = "USDT", since = NULL, until = NULL,
+                                      frequency = "24h",
+                                      exchange = "aggregated",
+                                      currency = "USD",
+                                      api_key = Sys.getenv("GN_API_KEY"),
+                                      as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "e" = exchange,
+              "c" = currency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_volume_from_exchanges_sum"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, exchange_outflows_sum = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}
+
+#' @rdname get_exchange_flow_totals
+#' @export
+get_exchange_withdrawals_count <- function(asset = "USDT", since = NULL, until = NULL,
+                                           frequency = "24h",
+                                           exchange = "aggregated",
+                                           api_key = Sys.getenv("GN_API_KEY"),
+                                           as_date = TRUE) {
+  tmp <- list("a" = asset,
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "e" = exchange,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/transactions/transfers_from_exchanges_count"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, exchange_withdrawals_count = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}

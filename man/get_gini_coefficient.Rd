@@ -14,6 +14,8 @@ get_gini_coefficient(
 )
 }
 \arguments{
+\item{asset}{This is the asset to get information on (defaults to `"ETH"`). The list of available assets is on the GN API site}
+
 \item{since, until}{A POSIX compatible date-time object. It's converted to a unix date number}
 
 \item{frequency}{A resolution for the data. See API documentation but it defaults to 24h}

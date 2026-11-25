@@ -934,3 +934,45 @@ get_spot_volume_mcap_ratio <- function(asset="BTC",since=NULL,until=NULL,
   }
   return(x)
 }
+
+
+#' Get Aggregate Stablecoin Market Cap (USD)
+#'
+#' Returns the combined USD market capitalization of all stablecoins tracked by
+#' Glassnode.
+#'
+#' @param since,until A POSIX compatible date-time object or date string
+#' @param frequency A resolution for the data (defaults to \code{"24h"})
+#' @param api_key The API key to use. By default it checks the GN_API_KEY
+#'   environment variable
+#' @param as_date A logical to return a Date object for daily observations
+#'
+#' @return A tibble with columns \code{date} and \code{stablecoin_marketcap}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- get_stablecoin_marketcap()
+#' }
+get_stablecoin_marketcap <- function(since = NULL, until = NULL,
+                                     frequency = "24h",
+                                     api_key = Sys.getenv("GN_API_KEY"),
+                                     as_date = TRUE) {
+  tmp <- list("a" = "BTC",
+              "s" = since,
+              "u" = until,
+              "i" = frequency,
+              "api_key" = api_key)
+  params <- do.call(make_params, tmp)
+  x <- do.call(call_glassnode_api, c(
+    list(path = "v1/metrics/market/marketcap_stablecoins_usd"),
+    params
+  )) |>
+    tibble::as_tibble() |>
+    dplyr::rename(date = t, stablecoin_marketcap = v) |>
+    dplyr::mutate(date = as.POSIXct(date, origin = "1970-01-01 00:00:00", tz = "UTC"))
+  if (as_date && frequency == "24h") {
+    x$date <- as.Date(x$date)
+  }
+  return(x)
+}

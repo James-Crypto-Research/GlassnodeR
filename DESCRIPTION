@@ -1,16 +1,15 @@
 Package: GlassnodeR
 Type: Package
-Title: Retreive Glassnode API Data and Return a Tidy Dataset
+Title: Retrieve Glassnode API Data and Return a Tidy Dataset
 Version: 0.0.1
 Authors@R:
-    person("James", "Chapman", , "jchapman@bankofcanada", role = c("aut","cre"),
+    person("James", "Chapman", , "jchapman@bankofcanada.ca", role = c("aut","cre"),
            comment = c(ORCID = "0000-0003-3154-9699"))
-Description: This package uses the users API key to download various aspects of
- the glassnode API. It then returns this data to the user in a consistent and
+Description: This package uses the user's API key to download various aspects of
+ the Glassnode API. It then returns this data to the user in a consistent and
  tidy format for ease of analysis.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports:
   dplyr,
   forcats,
@@ -18,11 +17,10 @@ Imports:
   httr,
   jsonlite,
   lubridate,
-  plyr,
   purrr,
   rlang,
   tibble,
-  tidyr,
+  tidyr
 Suggests: 
     testthat (>= 3.0.0)
 Config/roxygen2/version: 8.0.0

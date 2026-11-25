@@ -85,7 +85,7 @@ tmp <- list(
   )
   params <- do.call(make_params,tmp)
   x <- paths |> purrr::map(call_lightning_api, params) |>
-    plyr::join_all(by="date")
+    purrr::reduce(dplyr::full_join, by = "date")
   if (as_date & params["i"] == "24h"){
     x$date <- as.Date(x$date)
   }

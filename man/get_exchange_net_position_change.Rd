@@ -5,17 +5,26 @@
 \title{Get Exchange Net Position Change}
 \usage{
 get_exchange_net_position_change(
+  asset = "BTC",
   since = NULL,
   until = NULL,
   frequency = "24h",
+  exchange = NULL,
+  currency = NULL,
   api_key = Sys.getenv("GN_API_KEY"),
   as_date = TRUE
 )
 }
 \arguments{
+\item{asset}{Asset ticker to query (defaults to \code{"BTC"})}
+
 \item{since, until}{A POSIX compatible date-time object. It's converted to a unix date number}
 
 \item{frequency}{A resolution for the data. See API documentation but it defaults to 24h}
+
+\item{exchange}{Optional exchange filter (e.g. \code{"aggregated"}, \code{"binance"})}
+
+\item{currency}{Optional currency denomination (\code{"NATIVE"} or \code{"USD"})}
 
 \item{api_key}{The API key to use. By default it will check the GN_API_KEY environmental variable}
 
@@ -25,7 +34,7 @@ get_exchange_net_position_change(
 Returns a tibble with columns for the datetime and exchange net position change
 }
 \description{
-The net change in exchange positions over time.
+The 30-day net change in exchange balances over time.
 }
 \examples{
 \dontrun{

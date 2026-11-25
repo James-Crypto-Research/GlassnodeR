@@ -1,10 +1,13 @@
 #' Get Exchange Net Position Change
 #'
-#' The net change in exchange positions over time.
+#' The 30-day net change in exchange balances over time.
 #'
-#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
+#' @param asset Asset ticker to query (defaults to \code{"BTC"})
 #' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
+#' @param exchange Optional exchange filter (e.g. \code{"aggregated"}, \code{"binance"})
+#' @param currency Optional currency denomination (\code{"NATIVE"} or \code{"USD"})
+#' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
 #' @param as_date A logical to return a date-time object or a date object for daily observations
 #'
 #' @return Returns a tibble with columns for the datetime and exchange net position change
@@ -15,14 +18,19 @@
 #' #Need a valid API key to run
 #' x <- get_exchange_net_position_change()
 #' }
-get_exchange_net_position_change <- function(since=NULL, until=NULL,
-                                             frequency="24h",
+get_exchange_net_position_change <- function(asset = "BTC",
+                                             since = NULL, until = NULL,
+                                             frequency = "24h",
+                                             exchange = NULL,
+                                             currency = NULL,
                                              api_key = Sys.getenv("GN_API_KEY"),
-                                             as_date=TRUE){
-  tmp <- list("a" = "btc",
+                                             as_date = TRUE){
+  tmp <- list("a" = asset,
               "s" = since,
               "u" = until,
               "i" = frequency,
+              "e" = exchange,
+              "c" = currency,
               "api_key" = api_key)
   params <- do.call(make_params, tmp)
   x <- do.call(call_glassnode_api, c(
@@ -122,6 +130,7 @@ get_miner_net_position_change <- function(since=NULL, until=NULL,
 #'
 #' A measure of wealth distribution inequality.
 #'
+#' @param asset This is the asset to get information on (defaults to `"ETH"`). The list of available assets is on the GN API site
 #' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
 #' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h
@@ -162,6 +171,7 @@ get_gini_coefficient <- function(asset="ETH", since=NULL, until=NULL,
 #'
 #' A measure of market concentration among addresses.
 #'
+#' @param asset This is the asset to get information on (defaults to `"ETH"`). The list of available assets is on the GN API site
 #' @param api_key The API key to use. By default it will check the GN_API_KEY environmental variable
 #' @param since,until A POSIX compatible date-time object. It's converted to a unix date number
 #' @param frequency A resolution for the data. See API documentation but it defaults to 24h

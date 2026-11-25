@@ -46,9 +46,10 @@ get_revenue_miners <- function(chain="BTC",
     warning("Individual miner data endpoint is currently unavailable. Returning aggregated data only.")
     miner_list <- "aggregated"
   }
-  x <- purrr::map(miner_list,get_miner_rev,chain=chain,since=since,until=until,
-                frequency=frequency,currency=currency,api_key=api_key,
-                as_date=as_date) |> plyr::join_all(by="date") |>
+  x <- purrr::map(miner_list, get_miner_rev, chain = chain, since = since, until = until,
+                  frequency = frequency, currency = currency, api_key = api_key,
+                  as_date = as_date) |>
+    purrr::reduce(dplyr::full_join, by = "date") |>
     tibble::as_tibble()
   if (as_date & (frequency == "24h")) {
     x$date <- as.Date(x$date)
@@ -125,9 +126,10 @@ get_vol_miners <- function(since=NULL,until=NULL,
     warning("Individual miner data endpoint is currently unavailable. Returning aggregated data only.")
     miner_list <- "aggregated"
   }
-  x <- purrr::map(miner_list,get_miner_vol,since=since,until=until,
-                       frequency=frequency,api_key=api_key,
-                       as_date=as_date) |> plyr::join_all(by="date") |>
+  x <- purrr::map(miner_list, get_miner_vol, since = since, until = until,
+                  frequency = frequency, api_key = api_key,
+                  as_date = as_date) |>
+    purrr::reduce(dplyr::full_join, by = "date") |>
     tibble::as_tibble()
   if (as_date & (frequency == "24h")) {
     x$date <- as.Date(x$date)
